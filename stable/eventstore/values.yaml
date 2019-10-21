@@ -6,7 +6,7 @@
 image: eventstore/eventstore
 ##
 ## Event Store image tag
-imageTag: release-4.1.1-hotfix1
+imageTag: release-5.0.2
 ##
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -38,6 +38,10 @@ clusterSize: 1
 ## ref: https://eventstore.org/docs/http-api/security/index.html
 ## ref: https://github.com/helm/helm/blob/master/docs/charts_hooks.md
 admin:
+  ##
+  ## Host name for admin interface. If you plan on using a custom DNS such
+  ## as eventstore.mycompany.com, then the value would be 'eventstore.mycompany.com'.
+  hostname: localhost
   ##
   ## Image with curl installed to make POST request for setting credentials.
   jobImage: tutum/curl

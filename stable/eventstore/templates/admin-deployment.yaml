@@ -23,6 +23,7 @@ spec:
         app.kubernetes.io/component: admin
       {{- if .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/admin-configmap.yaml") . | sha256sum }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
