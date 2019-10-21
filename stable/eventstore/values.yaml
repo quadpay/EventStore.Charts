@@ -42,6 +42,19 @@ admin:
   ## Host name for admin interface. If you plan on using a custom DNS such
   ## as eventstore.mycompany.com, then the value would be 'eventstore.mycompany.com'.
   hostname: localhost
+
+  ingress:
+    enabled: false
+
+  ## annotations:
+  ##   kubernetes.io/ingress.class: "nginx"
+  ##   nginx.ingress.kubernetes.io/hsts: "false"
+
+  ## tls:
+  ##   - secretName: chart-example-tls
+  ##     hosts:
+  ##       - chart-example.local
+
   ##
   ## Image with curl installed to make POST request for setting credentials.
   jobImage: tutum/curl
