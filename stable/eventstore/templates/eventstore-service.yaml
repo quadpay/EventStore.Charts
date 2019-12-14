@@ -14,6 +14,12 @@ spec:
     app.kubernetes.io/name: {{ include "eventstore.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
+    {{- if .Values.ssl.enabled }}
+    - name: ext-secure-tcp-port
+      protocol: TCP
+      port: {{ .Values.ssl.extSecureTcpPort }}
+      targetPort: {{ .Values.ssl.extSecureTcpPort }}
+    {{- end }}
     - name: ext-tcp-port
       protocol: TCP
       port: {{ .Values.extTcpPort }}

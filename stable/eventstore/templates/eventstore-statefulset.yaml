@@ -46,6 +46,21 @@ spec:
         - name: {{ . }}
       {{- end}}
       {{- end }}
+      {{- if .Values.ssl.enabled }}
+      initContainers:
+        - name: secretwriter
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+          volumeMounts:
+            - mountPath: /certificate
+              name: certificate
+            - mountPath: /secret
+              name: secret-volume
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - openssl pkcs12 -export -out /certificate/eventstore.p12 -in /secret/tls.crt -inkey /secret/tls.key -password pass:{{ .Values.ssl.bundlePassword }};
+      {{- end }}
       containers:
       {{- if .Values.metrics.enabled }}
         - name: prometheus-exporter
@@ -93,6 +108,9 @@ spec:
                   fieldPath: status.podIP
           {{- end }}
           ports:
+            {{- if .Values.ssl.enabled }}
+            - containerPort: {{ .Values.ssl.extSecureTcpPort }}
+            {{- end }}
             - containerPort: {{ .Values.intTcpPort }}
             - containerPort: {{ .Values.extTcpPort }}
             - containerPort: {{ .Values.intHttpPort }}
@@ -117,7 +135,18 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+          {{- if .Values.ssl.enabled }}
+            - name: certificate
+              mountPath: /certificate
+          {{- end }}
       volumes:
+      {{- if .Values.ssl.enabled }}
+        - name: certificate
+          emptyDir: {}
+        - name: secret-volume
+          secret:
+            secretName: {{ .Values.ssl.tlsSecretName }}
+      {{- end }}
       {{- if (not .Values.persistence.enabled) }}
         - name: data
           emptyDir: {}

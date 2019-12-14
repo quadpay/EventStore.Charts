@@ -32,6 +32,20 @@ data:
   EVENTSTORE_INT_HTTP_PREFIXES: "http://*:{{ .Values.intHttpPort }}/"
   ## The prefixes that the external HTTP server should respond to. 
   EVENTSTORE_EXT_HTTP_PREFIXES: "http://*:{{ .Values.extHttpPort }}/"
+  {{- if .Values.ssl.enabled }}
+  ## External secure TCP port
+  EVENTSTORE_EXT_SECURE_TCP_PORT: {{ quote .Values.ssl.extSecureTcpPort }}
+  ## Internal secre TCP port
+  EVENTSTORE_INT_SECURE_TCP_PORT: {{ quote .Values.ssl.intSecureTcpPort }}
+  ## The path to the PKCS12 bundle
+  EVENTSTORE_CERTIFICATE_FILE: /certificate/eventstore.p12
+  ## The password to the PKCS12 bundle
+  EVENTSTORE_CERTIFICATE_PASSWORD: {{ quote .Values.ssl.bundlePassword }}
+  ## Secure cluster internal communication
+  EVENTSTORE_USE_INTERNAL_SSL: "True"
+  ## The hostname given in the TLS secret
+  EVENTSTORE_SSL_TARGET_HOST: {{ quote .Values.ssl.sslTargetHost }}
+  {{- end }}
   # Note: changing `Values.eventStoreConfig` won't change the configmap 
   # checksum and so won't make the pods restart
   {{- range $setting, $option := .Values.eventStoreConfig }}

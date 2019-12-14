@@ -133,6 +133,22 @@ metrics:
   port: 9448
   resources: {}
 
+## Enable secure TCP port
+## See: https://eventstore.org/docs/server/setting-up-ssl/index.html?tabs=tabid-6%2Ctabid-8#setting-up-ssl-on-linux
+## for connection guidance
+ssl:
+  enabled: false
+  ## The name of an existing secret of type TLS which contains the SSL certificate the cluster should present
+  tlsSecretName: "eventstore-tls-secret"
+  ## The hostname given in the TLS secret
+  sslTargetHost: eventstore.contoso.com
+  ## The port over which to offer a TLS connection
+  extSecureTcpPort: 1115
+  ## Secure port for cluster communication
+  intSecureTcpPort: 1117
+  ## The password to encrypt the converted PKCS12 bundle
+  bundlePassword: changeme
+
 resources: {}
   ## If you want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
